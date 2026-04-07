@@ -72,7 +72,8 @@
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse($recentUsulan as $u)
-                    <tr class="hover:bg-gray-50 transition cursor-pointer" @click="window.location='{{ route('admin.usulan.show', $u) }}'">                        <td class="px-4 py-3 font-semibold text-orange-600">{{ $u->nomor_surat }}</td>
+                    <tr class="hover:bg-gray-50 transition cursor-pointer" onclick="window.location='{{ route('admin.usulan.show', $u) }}'">
+                        <td class="px-4 py-3 font-semibold text-orange-600">{{ $u->nomor_surat }}</td>
                         <td class="px-4 py-3 text-gray-600 text-xs">{{ $u->user->instansi ?? '-' }}</td>
                         <td class="px-4 py-3 text-gray-600 max-w-xs truncate">{{ $u->perihal }}</td>
                         <td class="px-4 py-3">
