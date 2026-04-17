@@ -434,18 +434,22 @@ function berkasWizard() {
             this.currentStep = 2;
         },
 
-        cariASN() {
-            const dummy = {
-                '197001011995031001': { nama: 'Budi Santoso, S.Pd', pangkat: 'Pembina / IV-a', jabatan: 'Guru Madya', unit: 'SDN 1 Panji' },
-                '198505152010011002': { nama: 'Siti Aminah, S.Pd', pangkat: 'Penata / III-c', jabatan: 'Guru Pertama', unit: 'SDN 2 Panji' },
-            };
-            const nipClean = this.nip.replace(/\s/g, '');
-            if (dummy[nipClean]) {
-                const d = dummy[nipClean];
-                this.nama = d.nama; this.pangkat = d.pangkat;
-                this.jabatan = d.jabatan; this.unitKerjaSaatIni = d.unit;
-            } else {
-                alert('NIP tidak ditemukan. Silakan isi data manual.');
+        async cariASN() {
+            if (!this.nip) return;
+            try {
+                const res = await fetch(`/user/pns/cari?nip=${encodeURIComponent(this.nip)}`);
+                const data = await res.json();
+                if (data.found) {
+                    this.nama = data.nama;
+                    this.pangkat = data.pangkat;
+                    this.jabatan = data.jabatan;
+                    this.unitKerjaSaatIni = data.unit_kerja;
+                } else {
+                    alert('NIP tidak ditemukan. Silakan isi manual.');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Terjadi kesalahan saat mencari NIP. Coba lagi.');
             }
         }
     }

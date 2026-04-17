@@ -25,6 +25,9 @@ Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(f
     Route::get('/usulan/{usulan}/berkas/create', [UserBerkas::class, 'create'])->name('berkas.create');
     Route::post('/usulan/{usulan}/berkas', [UserBerkas::class, 'store'])->name('berkas.store');
     Route::delete('/usulan/{usulan}/berkas/{berkas}', [UserBerkas::class, 'destroy'])->name('berkas.destroy');
+
+    // PNS lookup
+    Route::get('/pns/cari', [UserBerkas::class, 'cariPns'])->name('pns.cari');
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {

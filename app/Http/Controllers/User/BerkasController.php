@@ -20,6 +20,23 @@ class BerkasController extends Controller
         return view('user.berkas.index', compact('usulan', 'berkas'));
     }
 
+    // API: cari PNS by NIP
+    public function cariPns(Request $request)
+    {
+        $pns = \App\Models\Pns::where('nip', $request->nip)->first();
+        if (!$pns) return response()->json(['found' => false]);
+
+        return response()->json([
+            'found'       => true,
+            'nama'        => $pns->nama_lengkap ?: $pns->nama,
+            'pangkat'     => trim(($pns->pangkat ?? '') . (' / ' . ($pns->golongan ?? ''))),
+            'jabatan'     => $pns->jabatan,
+            'unit_kerja'  => $pns->unit_kerja,
+            'tempat_lahir'=> $pns->tempat_lahir,
+            'tgl_lahir'   => $pns->tanggal_lahir?->format('d-m-Y'),
+        ]);
+    }
+
     public function create(Usulan $usulan)
     {
         if ($usulan->user_id !== Auth::id()) abort(403);
