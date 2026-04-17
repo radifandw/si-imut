@@ -10,7 +10,7 @@ class AsnBerkas extends Model
 
     protected $fillable = [
         'berkas_id', 'nip', 'nama', 'pangkat_golongan',
-        'jabatan_saat_ini', 'unit_kerja_saat_ini',
+        'jabatan_saat_ini', 'jabatan_tujuan', 'unit_kerja_saat_ini',
         'status_pegawai', 'kedudukan_hukum',
     ];
 
