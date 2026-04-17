@@ -60,7 +60,32 @@ class UsulanController extends Controller
     public function kirim(Usulan $usulan)
     {
         if ($usulan->user_id !== Auth::id()) abort(403);
+        if (!in_array($usulan->tahapan, ['Draft', 'Input Berkas PERTEK/Rekomendasi'])) {
+            return back()->with('error', 'Usulan tidak bisa dikirim pada tahapan ini.');
+        }
         $usulan->update(['tahapan' => 'Menunggu Persetujuan Admin']);
         return redirect()->route('user.usulan.index')->with('success', 'Usulan berhasil dikirim ke admin!');
+    }
+
+    /**
+     * Revisi usulan yang ditolak — reset ke Input Berkas
+     * agar user bisa edit berkas dan kirim ulang
+     */
+    public function revisi(Usulan $usulan)
+    {
+        if ($usulan->user_id !== Auth::id()) abort(403);
+
+        if ($usulan->tahapan !== 'Ditolak') {
+            return back()->with('error', 'Hanya usulan yang ditolak yang bisa direvisi.');
+        }
+
+        $usulan->update([
+            'tahapan'       => 'Input Berkas PERTEK/Rekomendasi',
+            'catatan_admin' => $usulan->catatan_admin, // simpan catatan admin sebagai referensi
+        ]);
+
+        return redirect()
+            ->route('user.berkas.index', $usulan)
+            ->with('success', 'Usulan siap direvisi. Silakan perbaiki berkas sesuai catatan admin, lalu kirim ulang.');
     }
 }

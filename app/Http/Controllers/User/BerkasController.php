@@ -23,18 +23,26 @@ class BerkasController extends Controller
     // API: cari PNS by NIP
     public function cariPns(Request $request)
     {
-        $pns = \App\Models\Pns::where('nip', $request->nip)->first();
-        if (!$pns) return response()->json(['found' => false]);
+        try {
+            $nip = preg_replace('/\s+/', '', $request->nip ?? '');
+            $pns = \App\Models\Pns::where('nip', $nip)->first();
 
-        return response()->json([
-            'found'       => true,
-            'nama'        => $pns->nama_lengkap ?: $pns->nama,
-            'pangkat'     => trim(($pns->pangkat ?? '') . (' / ' . ($pns->golongan ?? ''))),
-            'jabatan'     => $pns->jabatan,
-            'unit_kerja'  => $pns->unit_kerja,
-            'tempat_lahir'=> $pns->tempat_lahir,
-            'tgl_lahir'   => $pns->tanggal_lahir?->format('d-m-Y'),
-        ]);
+            if (!$pns) {
+                return response()->json(['found' => false]);
+            }
+
+            $pangkat = trim(($pns->pangkat ?? '') . ($pns->golongan ? ' / ' . $pns->golongan : ''));
+
+            return response()->json([
+                'found'       => true,
+                'nama'        => $pns->nama_lengkap ?: $pns->nama,
+                'pangkat'     => $pangkat,
+                'jabatan'     => $pns->jabatan,
+                'unit_kerja'  => $pns->unit_kerja,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['found' => false, 'error' => $e->getMessage()], 500);
+        }
     }
 
     public function create(Usulan $usulan)
@@ -95,6 +103,83 @@ class BerkasController extends Controller
         }
 
         return redirect()->route('user.berkas.index', $usulan)->with('success', 'Berkas berhasil ditambahkan!');
+    }
+
+    public function edit(Usulan $usulan, Berkas $berkas)
+    {
+        if ($usulan->user_id !== Auth::id()) abort(403);
+        if (!in_array($usulan->tahapan, ['Draft', 'Input Berkas PERTEK/Rekomendasi'])) abort(403);
+
+        $berkas->load(['asnBerkas', 'dokumen']);
+        $unitKerjaList = $this->getUnitKerjaList();
+        return view('user.berkas.edit', compact('usulan', 'berkas', 'unitKerjaList'));
+    }
+
+    public function update(Request $request, Usulan $usulan, Berkas $berkas)
+    {
+        if ($usulan->user_id !== Auth::id()) abort(403);
+        if (!in_array($usulan->tahapan, ['Draft', 'Input Berkas PERTEK/Rekomendasi'])) abort(403);
+
+        $request->validate([
+            'kategori'           => 'required',
+            'jenis_usulan'       => 'required',
+            'unit_kerja'         => 'required',
+            'nip'                => 'required',
+            'nama'               => 'required',
+            'pangkat_golongan'   => 'nullable|string',
+            'jabatan_saat_ini'   => 'nullable|string',
+            'jabatan_tujuan'     => 'nullable|string',
+            'unit_kerja_saat_ini'=> 'nullable|string',
+            'status_pegawai'     => 'required|in:PNS,PPPK',
+            'kedudukan_hukum'    => 'nullable|string',
+            'dokumen.*'          => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+
+        $berkas->update([
+            'kategori'     => $request->kategori,
+            'jenis_usulan' => $request->jenis_usulan,
+            'unit_kerja'   => $request->unit_kerja,
+        ]);
+
+        $asn = $berkas->asnBerkas()->first();
+        if ($asn) {
+            $asn->update([
+                'nip'                => $request->nip,
+                'nama'               => $request->nama,
+                'pangkat_golongan'   => $request->pangkat_golongan,
+                'jabatan_saat_ini'   => $request->jabatan_saat_ini,
+                'jabatan_tujuan'     => $request->jabatan_tujuan,
+                'unit_kerja_saat_ini'=> $request->unit_kerja_saat_ini,
+                'status_pegawai'     => $request->status_pegawai,
+                'kedudukan_hukum'    => $request->kedudukan_hukum,
+            ]);
+        }
+
+        if ($request->hasFile('dokumen')) {
+            $existingCount = $berkas->dokumen()->count();
+            foreach ($request->file('dokumen') as $index => $file) {
+                $path = $file->store('dokumen/' . $usulan->id, 'public');
+                DokumenBerkas::create([
+                    'berkas_id'     => $berkas->id,
+                    'nama_dokumen'  => $request->nama_dokumen[$index] ?? $file->getClientOriginalName(),
+                    'file_path'     => $path,
+                    'jenis_dokumen' => $request->jenis_dokumen[$index] ?? 'Tambahan',
+                ]);
+            }
+        }
+
+        return redirect()->route('user.berkas.index', $usulan)->with('success', 'Berkas berhasil diperbarui!');
+    }
+
+    public function destroyDokumen(Usulan $usulan, Berkas $berkas, DokumenBerkas $dokumen)
+    {
+        if ($usulan->user_id !== Auth::id()) abort(403);
+        if (!in_array($usulan->tahapan, ['Draft', 'Input Berkas PERTEK/Rekomendasi'])) abort(403);
+
+        Storage::disk('public')->delete($dokumen->file_path);
+        $dokumen->delete();
+
+        return back()->with('success', 'Dokumen berhasil dihapus.');
     }
 
     public function destroy(Usulan $usulan, Berkas $berkas)

@@ -16,18 +16,26 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
     Route::get('/dashboard', [UserDashboard::class, 'index'])->name('dashboard');
+
+    // Usulan
     Route::get('/usulan', [UserUsulan::class, 'index'])->name('usulan.index');
     Route::post('/usulan', [UserUsulan::class, 'store'])->name('usulan.store');
     Route::delete('/usulan/{usulan}', [UserUsulan::class, 'destroy'])->name('usulan.destroy');
     Route::post('/usulan/{usulan}/kirim', [UserUsulan::class, 'kirim'])->name('usulan.kirim');
+    Route::post('/usulan/{usulan}/revisi', [UserUsulan::class, 'revisi'])->name('usulan.revisi');
     Route::get('/usulan/generate-nomor', [UserUsulan::class, 'generateNomor'])->name('usulan.generate-nomor');
-    Route::get('/usulan/{usulan}/berkas', [UserBerkas::class, 'index'])->name('berkas.index');
-    Route::get('/usulan/{usulan}/berkas/create', [UserBerkas::class, 'create'])->name('berkas.create');
-    Route::post('/usulan/{usulan}/berkas', [UserBerkas::class, 'store'])->name('berkas.store');
-    Route::delete('/usulan/{usulan}/berkas/{berkas}', [UserBerkas::class, 'destroy'])->name('berkas.destroy');
 
     // PNS lookup
     Route::get('/pns/cari', [UserBerkas::class, 'cariPns'])->name('pns.cari');
+
+    // Berkas
+    Route::get('/usulan/{usulan}/berkas', [UserBerkas::class, 'index'])->name('berkas.index');
+    Route::get('/usulan/{usulan}/berkas/create', [UserBerkas::class, 'create'])->name('berkas.create');
+    Route::post('/usulan/{usulan}/berkas', [UserBerkas::class, 'store'])->name('berkas.store');
+    Route::get('/usulan/{usulan}/berkas/{berkas}/edit', [UserBerkas::class, 'edit'])->name('berkas.edit');
+    Route::put('/usulan/{usulan}/berkas/{berkas}', [UserBerkas::class, 'update'])->name('berkas.update');
+    Route::delete('/usulan/{usulan}/berkas/{berkas}', [UserBerkas::class, 'destroy'])->name('berkas.destroy');
+    Route::delete('/usulan/{usulan}/berkas/{berkas}/dokumen/{dokumen}', [UserBerkas::class, 'destroyDokumen'])->name('berkas.dokumen.destroy');
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {

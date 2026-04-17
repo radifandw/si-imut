@@ -436,20 +436,24 @@ function berkasWizard() {
 
         async cariASN() {
             if (!this.nip) return;
+            const nipBersih = this.nip.replace(/\s+/g, '');
+            let data;
             try {
-                const res = await fetch(`/user/pns/cari?nip=${encodeURIComponent(this.nip)}`);
-                const data = await res.json();
-                if (data.found) {
-                    this.nama = data.nama;
-                    this.pangkat = data.pangkat;
-                    this.jabatan = data.jabatan;
-                    this.unitKerjaSaatIni = data.unit_kerja;
-                } else {
-                    alert('NIP tidak ditemukan. Silakan isi manual.');
-                }
+                const res = await fetch(`{{ route('user.pns.cari') }}?nip=${encodeURIComponent(nipBersih)}`);
+                data = await res.json();
             } catch (e) {
-                console.error(e);
-                alert('Terjadi kesalahan saat mencari NIP. Coba lagi.');
+                alert('Gagal menghubungi server: ' + e.message);
+                return;
+            }
+            if (data.error) {
+                alert('Error server: ' + data.error);
+            } else if (data.found) {
+                this.nama = data.nama;
+                this.pangkat = data.pangkat;
+                this.jabatan = data.jabatan;
+                this.unitKerjaSaatIni = data.unit_kerja;
+            } else {
+                alert('NIP tidak ditemukan di database. Silakan isi manual.');
             }
         }
     }

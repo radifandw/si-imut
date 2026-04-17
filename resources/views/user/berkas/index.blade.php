@@ -50,6 +50,33 @@
             </div>
         </div>
 
+        {{-- Notifikasi ditolak + tombol revisi --}}
+        @if($usulan->tahapan === 'Ditolak')
+        <div class="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div class="flex items-start gap-3">
+                <i class="fas fa-times-circle text-red-500 mt-0.5"></i>
+                <div class="flex-1">
+                    <p class="font-semibold text-red-700 text-sm">Usulan Ditolak</p>
+                    @if($usulan->catatan_admin)
+                    <p class="text-red-600 text-sm mt-1">
+                        <span class="font-medium">Catatan Admin:</span> {{ $usulan->catatan_admin }}
+                    </p>
+                    @endif
+                    <p class="text-red-500 text-xs mt-2">Perbaiki berkas sesuai catatan di atas, lalu kirim ulang.</p>
+                </div>
+            </div>
+            <form method="POST" action="{{ route('user.usulan.revisi', $usulan) }}" class="mt-3"
+                  onsubmit="return confirm('Mulai revisi usulan ini?')">
+                @csrf
+                <button type="submit"
+                        class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow transition">
+                    <i class="fas fa-edit"></i> Mulai Revisi
+                </button>
+            </form>
+        </div>
+        @endif
+
+        {{-- Tombol tambah & kirim (aktif saat draft/input berkas atau setelah revisi) --}}
         <div class="mt-4 flex gap-3">
             @if(in_array($usulan->tahapan, ['Draft', 'Input Berkas PERTEK/Rekomendasi']))
             <a href="{{ route('user.berkas.create', $usulan) }}"
@@ -114,14 +141,20 @@
                             </td>
                             <td class="px-4 py-4 text-center">
                                 @if(in_array($usulan->tahapan, ['Draft', 'Input Berkas PERTEK/Rekomendasi']))
-                                <form method="POST" action="{{ route('user.berkas.destroy', [$usulan, $b]) }}"
-                                      onsubmit="return confirm('Hapus berkas ini?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit"
-                                            class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-lg transition border border-red-200">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <div class="flex items-center justify-center gap-2">
+                                    <a href="{{ route('user.berkas.edit', [$usulan, $b]) }}"
+                                       class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg transition border border-blue-200">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form method="POST" action="{{ route('user.berkas.destroy', [$usulan, $b]) }}"
+                                          onsubmit="return confirm('Hapus berkas ini?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit"
+                                                class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-lg transition border border-red-200">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                                 @endif
                             </td>
                         </tr>
