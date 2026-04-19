@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "berkas_id": 1,
+        "nip": "197409062010011003",
+        "nama": "A L I",
+        "pangkat_golongan": "Pengatur Muda Tingkat I \/ II\/b",
+        "jabatan_saat_ini": "PENGOLAH DATA DAN INFORMASI",
+        "unit_kerja_saat_ini": "SMPN 2 Banyuglugur - Dinas Pendidikan dan Kebudayaan",
+        "status_pegawai": "PNS",
+        "kedudukan_hukum": "Aktif",
+        "created_at": "2026-04-17 03:52:47",
+        "updated_at": "2026-04-17 03:52:47",
+        "jabatan_tujuan": null
+    }
+]

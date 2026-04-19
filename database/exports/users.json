@@ -1,0 +1,26 @@
+[
+    {
+        "id": 2,
+        "name": "Dinas Pendidikan Kab. Situbondo",
+        "email": "user@siimut.id",
+        "password": "$2y$12$Py5EZxxlIgbevm2Vq48gUemln1vqocErGegl2qebFo56Y7pD550M2",
+        "role": "user",
+        "instansi": "Dinas Pendidikan dan Kebudayaan",
+        "nip": "198505152010011002",
+        "remember_token": null,
+        "created_at": "2026-04-13 09:16:23",
+        "updated_at": "2026-04-13 09:18:41"
+    },
+    {
+        "id": 1,
+        "name": "Administrator SI-IMUT",
+        "email": "admin@siimut.id",
+        "password": "$2y$12$5nS1UXa3sdwtJkkkp\/wPWuycvL\/o53A2fohnPLstZidr0rZxSIMg.",
+        "role": "admin",
+        "instansi": "BKD Kabupaten",
+        "nip": "199001012020121001",
+        "remember_token": "xAWzg3m4d9epbpOzHl15qELg6B5vVVBDHeey6yt9G8CElvaq3qWHxjV0rIIT",
+        "created_at": "2026-04-13 09:16:23",
+        "updated_at": "2026-04-13 09:18:40"
+    }
+]

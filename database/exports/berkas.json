@@ -1,0 +1,11 @@
+[
+    {
+        "id": 1,
+        "usulan_id": 1,
+        "kategori": "Mutasi",
+        "jenis_usulan": "Jabatan di Unit Kerjanya (Internalisasi)",
+        "unit_kerja": "Bagian Hukum - Setda",
+        "created_at": "2026-04-17 03:52:47",
+        "updated_at": "2026-04-17 03:52:47"
+    }
+]

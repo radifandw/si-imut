@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "berkas_id": 1,
+        "nama_dokumen": "Surat Pernyataan Ketersediaan Lowongan Jabatan dan Pembayaran TPP",
+        "file_path": "dokumen\/1\/sV1Ph9Qqp8Yeb8pdxXhAPSklpkHpyoebuYhGcmHY.pdf",
+        "jenis_dokumen": "Wajib",
+        "created_at": "2026-04-17 03:52:47",
+        "updated_at": "2026-04-17 03:52:47"
+    },
+    {
+        "id": 2,
+        "berkas_id": 1,
+        "nama_dokumen": "Surat Pengantar",
+        "file_path": "dokumen\/1\/g2BiPJ3O9QNssOtJFQYfVzuVcJSGpt1re7ToGOhn.pdf",
+        "jenis_dokumen": "Wajib",
+        "created_at": "2026-04-17 03:52:47",
+        "updated_at": "2026-04-17 03:52:47"
+    }
+]

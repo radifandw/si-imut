@@ -1,0 +1,41 @@
+[
+    {
+        "id": 2,
+        "nomor_surat": "P\/3653\/02\/D\/2026",
+        "tanggal_surat": "2026-02-17",
+        "perihal": "Permohonan Rekomendasi Pengangkatan Manajerial",
+        "kewenangan": "BKN Pusat",
+        "tahapan": "Input Berkas PERTEK\/Rekomendasi",
+        "jenis_usulan": "Non Otomasi",
+        "user_id": 2,
+        "catatan_admin": null,
+        "created_at": "2026-04-13 09:16:23",
+        "updated_at": "2026-04-13 09:16:23"
+    },
+    {
+        "id": 3,
+        "nomor_surat": "P\/3\/04\/D\/2026",
+        "tanggal_surat": "2026-04-14",
+        "perihal": "Permohonan Mutasi ASN",
+        "kewenangan": "Admin Kabupaten",
+        "tahapan": "Input Berkas PERTEK\/Rekomendasi",
+        "jenis_usulan": "Non Otomasi",
+        "user_id": 2,
+        "catatan_admin": null,
+        "created_at": "2026-04-14 19:40:30",
+        "updated_at": "2026-04-14 19:40:30"
+    },
+    {
+        "id": 1,
+        "nomor_surat": "P\/4703\/03\/D\/2026",
+        "tanggal_surat": "2026-03-26",
+        "perihal": "Mutasi ASN",
+        "kewenangan": "Admin Kabupaten",
+        "tahapan": "Menunggu Persetujuan Admin",
+        "jenis_usulan": "Non Otomasi",
+        "user_id": 2,
+        "catatan_admin": null,
+        "created_at": "2026-04-13 09:16:23",
+        "updated_at": "2026-04-17 03:54:11"
+    }
+]
