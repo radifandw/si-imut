@@ -44,4 +44,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/usulan/{usulan}', [AdminUsulan::class, 'show'])->name('usulan.show');
     Route::post('/usulan/{usulan}/setujui', [AdminUsulan::class, 'setujui'])->name('usulan.setujui');
     Route::post('/usulan/{usulan}/tolak', [AdminUsulan::class, 'tolak'])->name('usulan.tolak');
+    Route::post('/usulan/{usulan}/berkas/{berkas}/setujui', [AdminUsulan::class, 'setujuiBerkas'])->name('berkas.setujui');
+    Route::post('/usulan/{usulan}/berkas/{berkas}/tolak', [AdminUsulan::class, 'tolakBerkas'])->name('berkas.tolak');
 });
